@@ -1,1035 +1,1137 @@
-/* ═══════════════════════════════════════════════════════
-   StudyBoard — style.css
-   Paleta neutra + azul | Syne + DM Sans
-   ═══════════════════════════════════════════════════════ */
-
-:root {
-  --bg:          #f4f5f7;
-  --surface:     #ffffff;
-  --surface-2:   #f0f1f4;
-  --border:      #e2e4e9;
-
-  --text-primary:   #14161a;
-  --text-secondary: #5c6070;
-  --text-muted:     #9ca3af;
-
-  --accent:      #2563eb;
-  --accent-soft: #eff4ff;
-  --accent-dark: #1d4ed8;
-
-  --warn:        #f59e0b;
-  --warn-soft:   #fffbeb;
-  --danger:      #ef4444;
-  --success:     #10b981;
-
-  --sidebar-w:   240px;
-  --radius:      12px;
-  --radius-sm:   8px;
-  --shadow:      0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
-  --shadow-md:   0 4px 24px rgba(0,0,0,.10);
-
-  --font-display: 'Syne', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
-  --transition:   .2s cubic-bezier(.4,0,.2,1);
-  --transition-slow: .35s cubic-bezier(.4,0,.2,1);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: var(--text-primary);
-  background: var(--bg);
-  min-height: 100vh;
-  display: flex;
-  overflow-x: hidden;
-}
-img { max-width: 100%; height: auto; display: block; }
-button { cursor: pointer; font-family: inherit; }
-input, select, textarea { font-family: inherit; }
-a { text-decoration: none; color: inherit; }
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-
-/* ════════════════ SIDEBAR ══ */
-.sidebar {
-  position: fixed;
-  left: 0; top: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  z-index: 200;
-  transition: transform var(--transition-slow);
-}
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 24px 20px 20px;
-  border-bottom: 1px solid var(--border);
-}
-.brand-icon {
-  width: 34px; height: 34px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: var(--radius-sm);
-  display: grid; place-items: center;
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 16px;
-  flex-shrink: 0;
-}
-.brand-text { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: -.3px; }
-.sidebar-nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
-.nav-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px; font-weight: 500;
-  color: var(--text-secondary);
-  transition: background var(--transition), color var(--transition);
-}
-.nav-item:hover { background: var(--surface-2); color: var(--text-primary); }
-.nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
-.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-.sidebar-date { font-size: 12px; color: var(--text-muted); }
-
-.sidebar-toggle {
-  display: none;
-  position: fixed; top: 16px; left: 16px; z-index: 300;
-  width: 40px; height: 40px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-  box-shadow: var(--shadow);
-}
-.sidebar-toggle span { display: block; width: 18px; height: 2px; background: var(--text-primary); border-radius: 2px; }
-
-/* ════════════════ MAIN ══ */
-.main-content {
-  margin-left: var(--sidebar-w);
-  flex: 1;
-  padding: 32px;
-  min-height: 100vh;
-  max-width: calc(100vw - var(--sidebar-w));
-}
-
-.page { display: none; animation: fadeUp .3s ease; }
-.page.active { display: block; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ════════════════ PAGE HEADER ══ */
-.page-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
-}
-.page-title { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -.5px; }
-.page-subtitle { color: var(--text-secondary); font-size: 14px; margin-top: 3px; }
-
-/* ════════════════ CARDS ══ */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  transition: box-shadow var(--transition);
-}
-.card:hover { box-shadow: var(--shadow-md); }
-.card-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.card-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: .2px; }
-.card-body { padding: 20px; }
-
-/* ════════════════ STAT CARDS ══ */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px; margin-bottom: 24px;
-}
-.stat-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px;
-  display: flex; align-items: center; gap: 16px;
-  box-shadow: var(--shadow);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.stat-card.accent { border-left: 3px solid var(--accent); }
-.stat-card.warn   { border-left: 3px solid var(--warn); }
-.stat-icon {
-  font-size: 20px; width: 44px; height: 44px;
-  background: var(--surface-2); border-radius: var(--radius-sm);
-  display: grid; place-items: center; flex-shrink: 0; font-weight: 700;
-}
-.stat-card.accent .stat-icon { background: var(--accent-soft); color: var(--accent); }
-.stat-card.warn   .stat-icon { background: var(--warn-soft); color: var(--warn); }
-.stat-value { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -.5px; }
-.stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-
-/* ════════════════ GRIDS ══ */
-.grid-2col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
-
-/* ════════════════ BUTTONS ══ */
-.btn-primary {
-  background: var(--accent); color: #fff; border: none;
-  padding: 9px 18px; border-radius: var(--radius-sm);
-  font-size: 13.5px; font-weight: 600;
-  transition: background var(--transition), transform var(--transition);
-  white-space: nowrap;
-}
-.btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
-
-.btn-secondary {
-  background: var(--surface-2); color: var(--text-primary);
-  border: 1px solid var(--border);
-  padding: 9px 18px; border-radius: var(--radius-sm);
-  font-size: 13.5px; font-weight: 500;
-  transition: background var(--transition);
-}
-.btn-secondary:hover { background: var(--border); }
-
-.btn-danger {
-  background: #fef2f2; color: var(--danger);
-  border: 1px solid #fecaca;
-  padding: 6px 12px; border-radius: var(--radius-sm);
-  font-size: 12.5px; font-weight: 500;
-  transition: background var(--transition);
-}
-.btn-danger:hover { background: #fee2e2; }
-
-.btn-icon {
-  background: transparent; border: none;
-  color: var(--text-muted); font-size: 16px;
-  padding: 4px 8px; border-radius: 6px;
-  transition: background var(--transition), color var(--transition);
-}
-.btn-icon:hover { background: var(--surface-2); color: var(--text-primary); }
-
-/* ════════════════ FORMS ══ */
-.form-card { margin-bottom: 24px; }
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px; align-items: end;
-}
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group.form-full { grid-column: 1 / -1; }
-.form-group label {
-  font-size: 12.5px; font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: .4px;
-}
-.form-group input,
-.form-group select,
-.form-group textarea {
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text-primary);
-  font-size: 14px;
-  transition: border-color var(--transition), box-shadow var(--transition);
-  outline: none; resize: vertical;
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-}
-.form-actions { grid-column: 1 / -1; padding-top: 4px; }
-.file-input { padding: 7px !important; cursor: pointer; }
-.img-preview { margin-top: 8px; max-height: 160px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; }
-
-/* ── Form section headers ── */
-.form-section-title {
-  font-family: var(--font-display);
-  font-weight: 700; font-size: 13px;
-  color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: .5px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-.form-section-hint { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; margin-top: -4px; }
-
-/* ════════════════ TABELA DE MATÉRIAS (formulário simulado) ══ */
-.materias-table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-}
-.materias-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-.materias-table thead th {
-  background: var(--surface-2);
-  padding: 10px 14px;
-  text-align: left;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: .4px;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-.materias-table tbody tr { border-bottom: 1px solid var(--surface-2); }
-.materias-table tbody tr:last-child { border-bottom: none; }
-.materias-table tbody tr:hover { background: var(--surface-2); }
-.materias-table td { padding: 8px 14px; vertical-align: middle; }
-.materias-table td:first-child { font-weight: 500; white-space: nowrap; min-width: 130px; }
-.mat-input {
-  width: 80px;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 13.5px;
-  text-align: center;
-  background: var(--surface);
-  transition: border-color var(--transition);
-  outline: none;
-}
-.mat-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,.1); }
-.mat-pct { font-weight: 700; font-size: 13px; min-width: 48px; display: inline-block; }
-.mat-pct.high   { color: var(--success); }
-.mat-pct.mid    { color: var(--accent); }
-.mat-pct.low    { color: var(--warn); }
-.mat-pct.danger { color: var(--danger); }
-.mat-pct.empty  { color: var(--text-muted); }
-.table-total-row td {
-  padding: 10px 14px;
-  background: var(--surface-2);
-  border-top: 2px solid var(--border);
-  font-size: 14px;
-}
-
-/* ════════════════ ENEM ÁREAS WRAP ══ */
-.enem-areas-wrap { display: flex; flex-direction: column; gap: 24px; }
-.enem-area-block { }
-.enem-area-title {
-  font-family: var(--font-display);
-  font-weight: 700; font-size: 13px;
-  color: var(--accent);
-  text-transform: uppercase; letter-spacing: .5px;
-  margin-bottom: 8px;
-  padding: 6px 12px;
-  background: var(--accent-soft);
-  border-radius: var(--radius-sm);
-  display: inline-block;
-}
-
-/* ════════════════ SIMULADOS LIST ══ */
-.simulados-list { display: flex; flex-direction: column; gap: 10px; }
-.sim-item {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-  box-shadow: var(--shadow); cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-}
-.sim-item:hover { transform: translateX(3px); box-shadow: var(--shadow-md); border-color: var(--accent); }
-.sim-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 120px; }
-.sim-name { font-weight: 600; font-size: 14.5px; }
-.sim-meta { font-size: 12.5px; color: var(--text-secondary); }
-.sim-stats { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.pct-badge { font-family: var(--font-display); font-weight: 800; font-size: 18px; min-width: 56px; text-align: right; }
-.pct-badge.high   { color: var(--success); }
-.pct-badge.mid    { color: var(--accent); }
-.pct-badge.low    { color: var(--warn); }
-.pct-badge.danger { color: var(--danger); }
-.diff-badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .5px; }
-.diff-facil   { background: #dcfce7; color: #16a34a; }
-.diff-medio   { background: #fef9c3; color: #ca8a04; }
-.diff-dificil { background: #fee2e2; color: #dc2626; }
-.sim-actions { display: flex; gap: 6px; }
-
-/* ── Matérias dentro do card de simulado (lista) ── */
-.sim-materias-mini {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-}
-.mini-badge {
-  font-size: 11.5px;
-  padding: 3px 9px;
-  border-radius: 99px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-.mini-badge.high   { background: #dcfce7; border-color: #86efac; color: #16a34a; }
-.mini-badge.mid    { background: var(--accent-soft); border-color: #bfdbfe; color: var(--accent); }
-.mini-badge.low    { background: var(--warn-soft); border-color: #fde68a; color: #b45309; }
-.mini-badge.danger { background: #fee2e2; border-color: #fca5a5; color: var(--danger); }
-
-/* ════════════════ RANKING ══ */
-.ranking-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.ranking-item:last-child { border-bottom: none; }
-.rank-pos { font-family: var(--font-display); font-weight: 800; font-size: 12px; color: var(--text-muted); width: 20px; text-align: center; }
-.rank-name { flex: 1; font-size: 14px; font-weight: 500; }
-.rank-bar-wrap { width: 120px; height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
-.rank-bar { height: 100%; border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1); }
-.rank-pct { font-weight: 700; font-size: 13px; min-width: 40px; text-align: right; }
-
-/* ── Último simulado ── */
-.last-sim-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 14px; }
-.last-sim-label { color: var(--text-secondary); }
-.last-sim-value { font-weight: 600; }
-
-/* ════════════════ INTERVALOS DE REVISÃO ══ */
-.intervalos-list { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.intervalo-tag {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--surface-2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px 10px;
-  font-size: 13.5px;
-}
-.intervalo-tag label { font-size: 12px; color: var(--text-secondary); font-weight: 500; white-space: nowrap; }
-.intervalo-tag input {
-  width: 58px; padding: 4px 8px;
-  border: 1px solid var(--border); border-radius: 6px;
-  font-family: inherit; font-size: 13.5px; text-align: center;
-  outline: none; background: var(--surface);
-  transition: border-color var(--transition);
-}
-.intervalo-tag input:focus { border-color: var(--accent); }
-.intervalo-tag .btn-remove-int {
-  background: none; border: none;
-  color: var(--text-muted); font-size: 14px;
-  cursor: pointer; padding: 2px 4px;
-  border-radius: 4px;
-  transition: color var(--transition), background var(--transition);
-  line-height: 1;
-}
-.intervalo-tag .btn-remove-int:hover { color: var(--danger); background: #fee2e2; }
-
-/* ════════════════ REVISÃO ESPAÇADA — items ══ */
-.revisao-item {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
-  box-shadow: var(--shadow);
-  transition: transform var(--transition);
-  flex-wrap: wrap;
-}
-.revisao-item.overdue { border-left: 3px solid var(--danger); }
-.revisao-item.today   { border-left: 3px solid var(--accent); }
-.revisao-item.soon    { border-left: 3px solid var(--warn); }
-.revisao-item.done    { opacity: .55; }
-.rev-info { flex: 1; min-width: 120px; }
-.rev-title { font-weight: 600; font-size: 14px; }
-.rev-sub   { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.rev-date  { font-size: 12px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
-.rev-check {
-  width: 18px; height: 18px;
-  border: 2px solid var(--border); border-radius: 5px;
-  cursor: pointer; appearance: none; -webkit-appearance: none;
-  transition: background var(--transition), border-color var(--transition);
-  flex-shrink: 0;
-}
-.rev-check:checked { background: var(--accent); border-color: var(--accent); }
-
-/* ── Revisão Tabs ── */
-.revisao-tab-list { display: flex; flex-direction: column; gap: 10px; }
-.rev-done-stamp {
-  font-size: 11px; font-weight: 600;
-  padding: 3px 9px; border-radius: 99px;
-  background: #dcfce7; color: #16a34a;
-  white-space: nowrap;
-}
-
-/* ════════════════ ERROS ══ */
-.erros-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-.erro-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px;
-  box-shadow: var(--shadow); cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.erro-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.erro-materia { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--accent); margin-bottom: 6px; }
-.erro-assunto { font-weight: 600; font-size: 14.5px; margin-bottom: 4px; }
-.erro-preview { font-size: 13px; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.erro-actions { margin-top: 12px; display: flex; gap: 8px; }
-
-/* ════════════════ FILTRO ══ */
-.filter-bar { margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
-.filter-select {
-  padding: 8px 12px;
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  background: var(--surface); color: var(--text-primary);
-  font-family: inherit; font-size: 13.5px;
-  outline: none; cursor: pointer;
-  transition: border-color var(--transition);
-}
-.filter-select:focus { border-color: var(--accent); }
-
-/* ════════════════ METAS ══ */
-.metas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.meta-item { display: flex; flex-direction: column; gap: 6px; }
-.meta-label { font-size: 12.5px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; }
-.meta-input-wrap { display: flex; align-items: center; gap: 8px; }
-.meta-input { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; width: 80px; outline: none; transition: border-color var(--transition); }
-.meta-input:focus { border-color: var(--accent); }
-
-/* ════════════════ BACKUP ══ */
-.backup-grid { display: flex; flex-direction: column; gap: 20px; }
-.backup-item { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.backup-icon { width: 44px; height: 44px; background: var(--accent-soft); color: var(--accent); border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
-.backup-item > div:nth-child(2) { flex: 1; min-width: 160px; }
-.backup-item strong { font-size: 14px; display: block; margin-bottom: 2px; }
-.backup-item p { font-size: 13px; color: var(--text-secondary); }
-.import-area { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-/* ════════════════ PROGRESSO METAS ══ */
-.meta-progress-item { margin-bottom: 16px; }
-.meta-progress-header { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; }
-.meta-progress-name { font-weight: 600; }
-.meta-progress-pct  { color: var(--text-secondary); font-size: 12px; }
-.progress-bar-wrap { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
-.progress-bar { height: 100%; border-radius: 99px; transition: width .7s cubic-bezier(.4,0,.2,1); }
-
-/* ════════════════ TABS ══ */
-.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 20px; flex-wrap: wrap; }
-.tab { padding: 9px 16px; border: none; background: transparent; font-family: var(--font-body); font-size: 13.5px; font-weight: 500; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: color var(--transition), border-color var(--transition); white-space: nowrap; }
-.tab:hover { color: var(--text-primary); }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-
-/* ════════════════ CHARTS ══ */
-.chart-container { position: relative; height: 280px; }
-
-/* ════════════════ MODAL ══ */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.45);
-  z-index: 500; display: flex;
-  align-items: center; justify-content: center;
-  padding: 20px; backdrop-filter: blur(3px);
-  animation: fadeIn .2s ease;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal {
-  background: var(--surface); border-radius: var(--radius);
-  width: 100%; max-width: 520px; max-height: 88vh;
-  overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2);
-  animation: slideUp .25s ease;
-}
-.modal-lg { max-width: 700px; }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-header {
-  padding: 16px 20px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; background: var(--surface); z-index: 1;
-}
-.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
-.modal-body { padding: 20px; }
-.modal-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--surface-2); font-size: 14px; }
-.modal-row:last-child { border-bottom: none; }
-.modal-row-label { color: var(--text-secondary); }
-.modal-row-value { font-weight: 600; }
-.modal-section-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; margin: 16px 0 8px; }
-.modal-img { max-height: 300px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border); width: 100%; margin-top: 8px; }
-
-/* ── Modal matérias table ── */
-.modal-mat-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
-.modal-mat-table th { text-align: left; padding: 8px 10px; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid var(--border); }
-.modal-mat-table td { padding: 8px 10px; border-bottom: 1px solid var(--surface-2); }
-.modal-mat-table tr:last-child td { border-bottom: none; }
-.modal-mat-table .col-pct { font-weight: 700; }
-
-/* ════════════════ TOAST ══ */
-.toast {
-  position: fixed; bottom: 28px; right: 28px;
-  background: var(--text-primary); color: #fff;
-  padding: 12px 20px; border-radius: var(--radius-sm);
-  font-size: 13.5px; font-weight: 500;
-  box-shadow: var(--shadow-md); z-index: 900;
-  opacity: 0; transform: translateY(8px); pointer-events: none;
-  transition: opacity .25s, transform .25s; max-width: 320px;
-}
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { background: var(--success); }
-.toast.error   { background: var(--danger); }
-
-/* ════════════════ HELPERS ══ */
-.hidden { display: none !important; }
-.mt-16 { margin-top: 16px; }
-.mt-24 { margin-top: 24px; }
-.mb-24 { margin-bottom: 24px; }
-.empty-state { color: var(--text-muted); font-size: 14px; text-align: center; padding: 24px 0; }
-
-.next-rev-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--surface-2); font-size: 13.5px; gap: 8px; }
-.next-rev-item:last-child { border-bottom: none; }
-.next-rev-name { font-weight: 500; flex: 1; }
-.next-rev-date { font-size: 12px; padding: 3px 8px; border-radius: 99px; font-weight: 600; white-space: nowrap; }
-.next-rev-date.overdue { background: #fee2e2; color: var(--danger); }
-.next-rev-date.today   { background: var(--accent-soft); color: var(--accent); }
-.next-rev-date.soon    { background: var(--warn-soft); color: var(--warn); }
-.next-rev-date.future  { background: var(--surface-2); color: var(--text-secondary); }
-
-/* ════════════════ RESPONSIVE ══ */
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-md); }
-  .sidebar-toggle { display: flex; }
-  .main-content { margin-left: 0; max-width: 100vw; padding: 64px 16px 24px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .erros-list { grid-template-columns: 1fr; }
-  .charts-grid { grid-template-columns: 1fr; }
-  .backup-item { flex-direction: column; align-items: flex-start; }
-  .materias-table-wrap { font-size: 13px; }
-}
-@media (max-width: 480px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .page-header { flex-direction: column; }
-}
-
-/* ════════════════ GRID 3 COLUNAS ══ */
-.grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 0; }
-
-/* ════════════════ REPERTÓRIOS ══ */
-.repertorios-list { display: flex; flex-direction: column; gap: 14px; }
-.repertorio-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px 20px;
-  box-shadow: var(--shadow);
-  transition: box-shadow var(--transition);
-}
-.repertorio-card:hover { box-shadow: var(--shadow-md); }
-.repertorio-eixo {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .6px; color: var(--accent); margin-bottom: 10px;
-  padding: 3px 10px; background: var(--accent-soft);
-  border-radius: 99px; display: inline-block;
-}
-.repertorio-texto {
-  font-size: 14px; line-height: 1.7;
-  color: var(--text-primary); margin-bottom: 12px;
-}
-.repertorio-actions { display: flex; gap: 8px; }
-
-/* ════════════════ PERSONALIZAÇÃO DE CORES ══ */
-.cores-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-.cor-item { display: flex; flex-direction: column; gap: 6px; }
-.cor-item label {
-  font-size: 12.5px; font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: .4px;
-}
-.cor-input-wrap { display: flex; align-items: center; gap: 8px; }
-.cor-picker {
-  width: 44px; height: 36px;
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: 2px; cursor: pointer; background: var(--surface);
-  flex-shrink: 0;
-}
-.cor-hex {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-family: monospace; font-size: 14px;
-  background: var(--surface); color: var(--text-primary);
-  outline: none;
-  transition: border-color var(--transition);
-}
-.cor-hex:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
-
-/* Responsive extras */
-@media (max-width: 768px) {
-  .grid-3col { grid-template-columns: 1fr; }
-}
-
-/* ════════════════ CRONOGRAMA SEMANAL ══ */
-.crono-table-scroll {
-  overflow-x: auto;
-  border-radius: var(--radius-sm);
-}
-
-.crono-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-  min-width: 700px;
-}
-
-.crono-table thead th {
-  background: var(--surface-2);
-  padding: 10px 12px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: .4px;
-  border-bottom: 2px solid var(--border);
-  white-space: nowrap;
-}
-
-.crono-th-hora {
-  text-align: left !important;
-  min-width: 90px;
-}
-
-.crono-hora-cell {
-  padding: 0 12px;
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--text-secondary);
-  background: var(--surface-2);
-  border-right: 2px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-  min-width: 90px;
-  position: relative;
-}
-
-.crono-del-hora {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 10px;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-  margin-left: 6px;
-  vertical-align: middle;
-  transition: color var(--transition), background var(--transition);
-  line-height: 1;
-}
-.crono-del-hora:hover { color: var(--danger); background: #fee2e2; }
-
-.crono-slot-cell {
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  text-align: center;
-  cursor: pointer;
-  min-width: 110px;
-  height: 52px;
-  vertical-align: middle;
-  transition: filter var(--transition), transform var(--transition);
-  position: relative;
-}
-
-.crono-slot-cell:hover {
-  filter: brightness(.93);
-  transform: scale(1.02);
-  z-index: 1;
-}
-
-.crono-slot-text {
-  font-size: 12.5px;
-  font-weight: 600;
-  line-height: 1.3;
-  display: block;
-  word-break: break-word;
-}
-
-.crono-empty-slot {
-  font-size: 18px;
-  color: var(--border);
-  font-weight: 300;
-}
-
-.crono-time-input {
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-  transition: border-color var(--transition);
-  background: var(--surface);
-  color: var(--text-primary);
-}
-.crono-time-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
-
-/* ── Cor rápida (paleta no modal) ── */
-.crono-cor-quick {
-  width: 22px; height: 22px;
-  border: 2px solid transparent;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform var(--transition), border-color var(--transition);
-  flex-shrink: 0;
-}
-.crono-cor-quick:hover { transform: scale(1.25); border-color: var(--text-primary); }
-
-/* ════════════════ ENEM DIA BLOCKS (formulário) ══ */
-.enem-dia-block {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 20px;
-  background: var(--surface-2);
-}
-
-.enem-dia-title {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  color: var(--text-primary);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--border);
-}
-
-.enem-dia-block .enem-area-block {
-  margin-bottom: 14px;
-}
-
-.enem-dia-block .enem-area-block:last-child {
-  margin-bottom: 0;
-}
-
-/* ════ SELEÇÃO DE FONTES ════ */
-.fontes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.fonte-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color .18s, background .18s;
-}
-
-.fonte-option:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.fonte-option input[type="radio"] {
-  accent-color: var(--accent);
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.fonte-option input[type="radio"]:checked + .fonte-preview {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.fonte-option:has(input:checked) {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.fonte-preview {
-  font-size: 15px;
-  color: var(--text-primary);
-  transition: color .18s;
-}
-
-/* ═══════════════════════════════════════════════════
-   AUTH SCREENS
-   ═══════════════════════════════════════════════════ */
-
-#auth-screen,
-#pending-screen {
-  position: fixed;
-  inset: 0;
-  background: var(--bg, #0f1117);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.auth-card {
-  background: var(--surface, #1a1d27);
-  border: 1px solid var(--border, #2a2d3a);
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.auth-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.auth-card h2 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin: 0;
-}
-
-.auth-subtitle {
-  color: var(--text-muted, #888);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-
-.auth-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
-}
-
-.auth-field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted, #aaa);
-}
-
-.auth-field input {
-  background: var(--bg, #0f1117);
-  border: 1px solid var(--border, #2a2d3a);
-  border-radius: 8px;
-  padding: 0.7rem 1rem;
-  color: inherit;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.auth-field input:focus {
-  border-color: var(--accent, #2563eb);
-}
-
-.auth-error {
-  color: #ef4444;
-  font-size: 0.85rem;
-  min-height: 1.2em;
-  margin: 0;
-}
-
-.auth-submit {
-  width: 100%;
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent, #2563eb);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  transition: opacity 0.2s;
-}
-
-.auth-submit:hover { opacity: 0.88; }
-
-.auth-toggle {
-  background: none;
-  border: none;
-  color: var(--accent, #2563eb);
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-top: 0.75rem;
-  text-align: center;
-  text-decoration: underline;
-}
-
-.pending-icon {
-  font-size: 3rem;
-  margin: 0.5rem 0;
-}
-
-.pending-contact {
-  font-size: 0.85rem;
-  color: var(--text-muted, #888);
-}
-
-/* Barra de logout no topo do app */
-.logout-bar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1.25rem;
-  background: var(--surface, #1a1d27);
-  border-bottom: 1px solid var(--border, #2a2d3a);
-  z-index: 100;
-  border-bottom-left-radius: 10px;
-}
-
-.user-email {
-  font-size: 0.8rem;
-  color: var(--text-muted, #888);
-}
-
-.logout-btn-top {
-  background: none;
-  border: 1px solid var(--border, #2a2d3a);
-  color: var(--text-muted, #aaa);
-  border-radius: 6px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.logout-btn-top:hover {
-  background: var(--bg, #0f1117);
-  color: #fff;
-}
-
-/* ── Botão Google ── */
-.google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.8rem 1rem;
-  margin-top: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border, #2a2d3a);
-  background: var(--bg, #0f1117);
-  color: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
-}
-.google-btn:hover  { background: #1e2130; }
-.google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Estudo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Inter:wght@300;400;500;600&family=Roboto:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Merriweather:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ══ FIREBASE ══ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, addDoc, updateDoc,
+      deleteDoc, getDocs, collection
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ════════════════════════════════════════════════════════
+    // 🔧 COLE AQUI SUAS CREDENCIAIS DO FIREBASE
+    //    Firebase Console → Configurações do projeto → Seus apps
+    // ════════════════════════════════════════════════════════
+    const firebaseConfig = {
+      apiKey:            "AIzaSyBdKgFVhho8-y9g5Ejl3TbA4SCNkMZnKac",
+      authDomain:        "controle-de-estudos-8fe8e.firebaseapp.com",
+      projectId:         "controle-de-estudos-8fe8e",
+      storageBucket:     "controle-de-estudos-8fe8e.firebasestorage.app",
+      messagingSenderId: "707564055561",
+      appId:             "1:707564055561:web:cb1f511588a33c9ee95cd8"
+    };
+
+    const app       = initializeApp(firebaseConfig);
+    const auth      = getAuth(app);
+    const firestore = getFirestore(app);
+    const provider  = new GoogleAuthProvider();
+
+    // ── Expõe Firestore e funções globalmente para o db.js ──
+    window.__firestoreDB = firestore;
+    window.__fsLib = {
+      doc, getDoc, setDoc, addDoc, updateDoc,
+      deleteDoc, getDocs, collection
+    };
+
+    // ── Referências da tela de auth ──
+    const authScreen     = document.getElementById('auth-screen');
+    const appWrapper     = document.getElementById('app-wrapper');
+    const pendingScreen  = document.getElementById('pending-screen');
+    const authError      = document.getElementById('auth-error');
+    const logoutBtn      = document.getElementById('logout-btn');
+    const logoutBtnPend  = document.getElementById('logout-btn-pending');
+    const userEmailLabel = document.getElementById('user-email-label');
+    const googleBtn      = document.getElementById('google-btn');
+
+    // Botão "Entrar com Google"
+    googleBtn.addEventListener('click', async () => {
+      authError.textContent  = '';
+      googleBtn.disabled     = true;
+      googleBtn.textContent  = 'Aguarde...';
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        const msgs = {
+          'auth/popup-closed-by-user':    'Login cancelado.',
+          'auth/popup-blocked':           'Popup bloqueado. Permita popups para este site.',
+          'auth/cancelled-popup-request': 'Login cancelado.',
+        };
+        authError.textContent = msgs[err.code] || 'Erro: ' + err.message;
+        googleBtn.disabled    = false;
+        googleBtn.textContent = 'Entrar com Google';
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click',     () => signOut(auth));
+    logoutBtnPend.addEventListener('click', () => signOut(auth));
+
+    // ── Listener principal de autenticação ──
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        authScreen.style.display    = 'flex';
+        appWrapper.style.display    = 'none';
+        pendingScreen.style.display = 'none';
+        window.__currentUID = null;
+        window.__appInited  = false;
+        googleBtn.disabled    = false;
+        googleBtn.textContent = 'Entrar com Google';
+        return;
+      }
+
+      // Verifica se tem acesso liberado
+      const snap = await getDoc(doc(firestore, 'usuarios_liberados', user.uid));
+
+      if (snap.exists() && snap.data().ativo === true) {
+        // ✅ Acesso liberado → injeta uid e inicia o app
+        window.__currentUID = user.uid;
+        authScreen.style.display    = 'none';
+        pendingScreen.style.display = 'none';
+        appWrapper.style.display    = 'block';
+        userEmailLabel.textContent  = user.email;
+        if (window.__initApp) window.__initApp();
+      } else {
+        // ⏳ Aguardando aprovação
+        authScreen.style.display    = 'none';
+        appWrapper.style.display    = 'none';
+        pendingScreen.style.display = 'flex';
+      }
+    });
+  </script>
+
+</head>
+<body>
+
+  <!-- ══════════════════════════════ TELA DE LOGIN ══ -->
+  <div id="auth-screen" style="display:flex">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-icon">C</div>
+        <span>Controle de Estudo</span>
+      </div>
+      <h2>Bem-vindo!</h2>
+      <p class="auth-subtitle">Faça login com sua conta Google para continuar</p>
+      <p id="auth-error" class="auth-error"></p>
+      <button id="google-btn" class="google-btn">
+        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Entrar com Google
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════ TELA AGUARDANDO APROVAÇÃO ══ -->
+  <div id="pending-screen" style="display:none">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-icon">C</div>
+        <span>Controle de Estudo</span>
+      </div>
+      <div class="pending-icon">⏳</div>
+      <h2>Aguardando aprovação</h2>
+      <p class="auth-subtitle">Seu cadastro foi recebido! Após o pagamento, seu acesso será liberado em até 24h.</p>
+      <p class="pending-contact">Dúvidas? Entre em contato pelo WhatsApp ou e-mail.</p>
+      <button id="logout-btn-pending" class="auth-submit" style="margin-top:1.5rem">Sair</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ APP WRAPPER ══ -->
+  <div id="app-wrapper" style="display:none">
+
+  <!-- botão de logout fixo no topo -->
+  <div class="logout-bar">
+    <span id="user-email-label" class="user-email"></span>
+    <button id="logout-btn" class="logout-btn-top">Sair</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">C</div>
+      <span class="brand-text">Controle de Estudo</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">◈</span><span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-page="simulados">
+        <span class="nav-icon">◻</span><span class="nav-label">Simulados Gerais</span>
+      </a>
+      <a href="#" class="nav-item" data-page="enem">
+        <span class="nav-icon">◈</span><span class="nav-label">Simulados ENEM</span>
+      </a>
+      <a href="#" class="nav-item" data-page="fuvest">
+        <span class="nav-icon">◈</span><span class="nav-label">Simulados FUVEST</span>
+      </a>
+      <a href="#" class="nav-item" data-page="graficos">
+        <span class="nav-icon">◎</span><span class="nav-label">Gráficos</span>
+      </a>
+      <a href="#" class="nav-item" data-page="redacoes_enem">
+        <span class="nav-icon">✎</span><span class="nav-label">Redações ENEM</span>
+      </a>
+      <a href="#" class="nav-item" data-page="redacoes_gerais">
+        <span class="nav-icon">✎</span><span class="nav-label">Redações Gerais</span>
+      </a>
+      <a href="#" class="nav-item" data-page="repertorios">
+        <span class="nav-icon">📚</span><span class="nav-label">Caderno de Repertórios</span>
+      </a>
+      <a href="#" class="nav-item" data-page="cronograma">
+        <span class="nav-icon">📅</span><span class="nav-label">Cronograma</span>
+      </a>
+      <a href="#" class="nav-item" data-page="revisao">
+        <span class="nav-icon">◷</span><span class="nav-label">Revisão Espaçada</span>
+      </a>
+      <a href="#" class="nav-item" data-page="erros">
+        <span class="nav-icon">△</span><span class="nav-label">Controle de Erros</span>
+      </a>
+      <a href="#" class="nav-item" data-page="config">
+        <span class="nav-icon">⊙</span><span class="nav-label">Configurações</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-date" id="sidebarDate"></div>
+    </div>
+  </aside>
+
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ════════════════════════════════════ MAIN ══ -->
+  <main class="main-content" id="mainContent">
+    <div class="toast" id="toast"></div>
+
+    <!-- ══════════════════ DASHBOARD ══ -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Visão geral do seu desempenho</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-icon">E</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statEnemMedia">—</div>
+            <div class="stat-label">Média ENEM (acertos)</div>
+          </div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-icon">F</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statFuvestMedia">—</div>
+            <div class="stat-label">Média FUVEST (acertos)</div>
+          </div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-icon">%</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statGeralPct">—</div>
+            <div class="stat-label">Média Vestibulares Gerais</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✓</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statTotalSim">0</div>
+            <div class="stat-label">Simulados Feitos</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">↑</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statMelhor">—</div>
+            <div class="stat-label">Melhor Matéria</div>
+          </div>
+        </div>
+        <div class="stat-card warn">
+          <div class="stat-icon">↓</div>
+          <div class="stat-body">
+            <div class="stat-value" id="statFraca">—</div>
+            <div class="stat-label">Matéria Mais Fraca</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Último simulado por tipo -->
+      <div class="grid-3col">
+        <div class="card">
+          <div class="card-header"><h3>Último Simulado Geral</h3></div>
+          <div class="card-body" id="ultimoSimuladoCard">
+            <p class="empty-state">Nenhum simulado registrado.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Último Simulado FUVEST</h3></div>
+          <div class="card-body" id="ultimoFuvestCard">
+            <p class="empty-state">Nenhum simulado registrado.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Último Simulado ENEM</h3></div>
+          <div class="card-body" id="ultimoEnemCard">
+            <p class="empty-state">Nenhum simulado registrado.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2col mt-24">
+        <div class="card">
+          <div class="card-header"><h3>Próximas Revisões</h3></div>
+          <div class="card-body" id="proximasRevisoes">
+            <p class="empty-state">Sem revisões agendadas.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Ranking de Matérias</h3></div>
+          <div class="card-body" id="rankingMaterias">
+            <p class="empty-state">Adicione simulados para ver o ranking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SIMULADOS GERAIS ══ -->
+    <section class="page" id="page-simulados">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Simulados Gerais</h1>
+          <p class="page-subtitle">Registre acertos de todas as matérias em cada simulado</p>
+        </div>
+        <button class="btn-primary" id="btnNovoSimulado">+ Novo Simulado</button>
+      </div>
+
+      <div class="card form-card hidden" id="formSimuladoCard">
+        <div class="card-header">
+          <h3 id="formSimuladoTitle">Novo Simulado</h3>
+          <button class="btn-icon" id="btnFecharFormSimulado">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formSimulado">
+            <input type="hidden" id="simId" />
+            <div class="form-section-title">Informações Gerais</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nome do Simulado</label>
+                <input type="text" id="simNome" placeholder="Ex: Cursinho — Maio 2025" required />
+              </div>
+              <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="simData" required />
+              </div>
+              <div class="form-group">
+                <label>Tempo Gasto (min)</label>
+                <input type="number" id="simTempo" min="0" placeholder="Ex: 240" />
+              </div>
+              <div class="form-group">
+                <label>Dificuldade</label>
+                <select id="simDificuldade">
+                  <option value="facil">Fácil</option>
+                  <option value="medio" selected>Médio</option>
+                  <option value="dificil">Difícil</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-section-title" style="margin-top:24px">Desempenho por Matéria</div>
+            <p class="form-section-hint">Preencha apenas as matérias que apareceram neste simulado. Campos em branco serão ignorados.</p>
+            <div class="materias-table-wrap">
+              <table class="materias-table">
+                <thead>
+                  <tr>
+                    <th>Matéria</th><th>Acertos</th><th>Total de Questões</th><th style="min-width:60px">%</th>
+                  </tr>
+                </thead>
+                <tbody id="simMateriasBody"></tbody>
+                <tfoot>
+                  <tr class="table-total-row">
+                    <td><strong>Total</strong></td>
+                    <td id="simTotalAcertos">—</td>
+                    <td id="simTotalQuestoes">—</td>
+                    <td id="simTotalPct">—</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="form-actions" style="margin-top:20px">
+              <button type="submit" class="btn-primary">Salvar Simulado</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="listaSimulados" class="simulados-list"></div>
+
+      <div class="modal-overlay hidden" id="modalSimulado">
+        <div class="modal modal-lg">
+          <div class="modal-header">
+            <h3 id="modalSimuladoTitle">Detalhes</h3>
+            <button class="btn-icon" id="btnFecharModalSimulado">✕</button>
+          </div>
+          <div class="modal-body" id="modalSimuladoBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SIMULADOS ENEM ══ -->
+    <section class="page" id="page-enem">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Simulados ENEM</h1>
+          <p class="page-subtitle">Matérias agrupadas pelas áreas do ENEM</p>
+        </div>
+        <button class="btn-primary" id="btnNovoEnem">+ Novo Simulado ENEM</button>
+      </div>
+
+      <div class="card form-card hidden" id="formEnemCard">
+        <div class="card-header">
+          <h3 id="formEnemTitle">Novo Simulado ENEM</h3>
+          <button class="btn-icon" id="btnFecharFormEnem">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formEnem">
+            <input type="hidden" id="enemId" />
+            <div class="form-section-title">Informações Gerais</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nome do Simulado</label>
+                <input type="text" id="enemNome" placeholder="Ex: ENEM 2024 — 1º Dia" required />
+              </div>
+              <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="enemData" required />
+              </div>
+              <div class="form-group">
+                <label>Tempo Gasto (min)</label>
+                <input type="number" id="enemTempo" min="0" placeholder="Ex: 330" />
+              </div>
+              <div class="form-group">
+                <label>Dificuldade</label>
+                <select id="enemDificuldade">
+                  <option value="facil">Fácil</option>
+                  <option value="medio" selected>Médio</option>
+                  <option value="dificil">Difícil</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-section-title" style="margin-top:24px">Desempenho por Matéria (por Área)</div>
+            <p class="form-section-hint">Preencha as matérias que tiveram questões. O total de questões por matéria já está preenchido.</p>
+            <div id="enemAreasWrap"></div>
+            <div class="form-actions" style="margin-top:20px">
+              <button type="submit" class="btn-primary">Salvar Simulado ENEM</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="listaEnem" class="simulados-list"></div>
+
+      <div class="modal-overlay hidden" id="modalEnem">
+        <div class="modal modal-lg">
+          <div class="modal-header">
+            <h3 id="modalEnemTitle">Detalhes</h3>
+            <button class="btn-icon" id="btnFecharModalEnem">✕</button>
+          </div>
+          <div class="modal-body" id="modalEnemBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SIMULADOS FUVEST ══ -->
+    <section class="page" id="page-fuvest">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Simulados FUVEST</h1>
+          <p class="page-subtitle">Acertos por matéria — total de questões editável</p>
+        </div>
+        <button class="btn-primary" id="btnNovoFuvest">+ Novo Simulado FUVEST</button>
+      </div>
+
+      <div class="card form-card hidden" id="formFuvestCard">
+        <div class="card-header">
+          <h3 id="formFuvestTitle">Novo Simulado FUVEST</h3>
+          <button class="btn-icon" id="btnFecharFormFuvest">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formFuvest">
+            <input type="hidden" id="fuvestId" />
+            <div class="form-section-title">Informações Gerais</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nome do Simulado</label>
+                <input type="text" id="fuvestNome" placeholder="Ex: FUVEST 2024 — 1ª Fase" required />
+              </div>
+              <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="fuvestData" required />
+              </div>
+              <div class="form-group">
+                <label>Tempo Gasto (min)</label>
+                <input type="number" id="fuvestTempo" min="0" placeholder="Ex: 240" />
+              </div>
+              <div class="form-group">
+                <label>Dificuldade</label>
+                <select id="fuvestDificuldade">
+                  <option value="facil">Fácil</option>
+                  <option value="medio" selected>Médio</option>
+                  <option value="dificil">Difícil</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-section-title" style="margin-top:24px">Desempenho por Matéria</div>
+            <p class="form-section-hint">O total de questões já está pré-preenchido com os valores padrão da FUVEST, mas você pode alterá-lo livremente.</p>
+            <div class="materias-table-wrap">
+              <table class="materias-table">
+                <thead>
+                  <tr>
+                    <th>Matéria</th><th>Acertos</th><th>Total de Questões</th><th style="min-width:60px">%</th>
+                  </tr>
+                </thead>
+                <tbody id="fuvestMateriasBody"></tbody>
+                <tfoot>
+                  <tr class="table-total-row">
+                    <td><strong>Total</strong></td>
+                    <td id="fuvestTotalAcertos">—</td>
+                    <td id="fuvestTotalQuestoes">—</td>
+                    <td id="fuvestTotalPct">—</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="form-actions" style="margin-top:20px">
+              <button type="submit" class="btn-primary">Salvar Simulado FUVEST</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="listaFuvest" class="simulados-list"></div>
+
+      <div class="modal-overlay hidden" id="modalFuvest">
+        <div class="modal modal-lg">
+          <div class="modal-header">
+            <h3 id="modalFuvestTitle">Detalhes</h3>
+            <button class="btn-icon" id="btnFecharModalFuvest">✕</button>
+          </div>
+          <div class="modal-body" id="modalFuvestBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ GRÁFICOS ══ -->
+    <section class="page" id="page-graficos">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Gráficos</h1>
+          <p class="page-subtitle">Visualize sua evolução</p>
+        </div>
+      </div>
+      <div class="tabs" id="graficosTabs">
+        <button class="tab active" data-gtab="gerais">Simulados Gerais</button>
+        <button class="tab" data-gtab="enem">Simulados ENEM</button>
+        <button class="tab" data-gtab="fuvest">Simulados FUVEST</button>
+      </div>
+
+      <div id="graficosGerais">
+        <div class="card mt-24">
+          <div class="card-header"><h3>Evolução Geral — Acertos</h3></div>
+          <div class="card-body chart-container"><canvas id="chartGeralEvolucao"></canvas></div>
+        </div>
+        <div class="charts-grid" id="chartsMateria"></div>
+      </div>
+
+      <div id="graficosEnem" class="hidden">
+        <div class="card mt-24">
+          <div class="card-header"><h3>Evolução Geral ENEM — Acertos</h3></div>
+          <div class="card-body chart-container"><canvas id="chartEnemEvolucao"></canvas></div>
+        </div>
+        <!-- Gráficos por dia do ENEM -->
+        <div class="charts-grid mt-24" id="chartsEnemDias"></div>
+        <!-- Gráficos por área -->
+        <div class="charts-grid" id="chartsEnemArea"></div>
+      </div>
+
+      <div id="graficosFuvest" class="hidden">
+        <div class="card mt-24">
+          <div class="card-header"><h3>Evolução Geral FUVEST — Acertos</h3></div>
+          <div class="card-body chart-container"><canvas id="chartFuvestEvolucao"></canvas></div>
+        </div>
+        <div class="charts-grid" id="chartsFuvestMateria"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ REDAÇÕES ENEM ══ -->
+    <section class="page" id="page-redacoes_enem">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Redações ENEM</h1>
+          <p class="page-subtitle">Registre e acompanhe o desempenho nas suas redações do ENEM</p>
+        </div>
+        <button class="btn-primary" id="btnNovaRedacaoEnem">+ Nova Redação</button>
+      </div>
+
+      <div class="card form-card hidden" id="formRedacaoEnemCard">
+        <div class="card-header">
+          <h3 id="formRedacaoEnemTitle">Nova Redação ENEM</h3>
+          <button class="btn-icon" id="btnFecharFormRedacaoEnem">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formRedacaoEnem">
+            <input type="hidden" id="redEnemId" />
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label>Tema da Redação</label>
+                <input type="text" id="redEnemTema" placeholder="Ex: O impacto das redes sociais na saúde mental" required />
+              </div>
+              <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="redEnemData" required />
+              </div>
+              <div class="form-group">
+                <label>Nota Geral (0–1000)</label>
+                <input type="number" id="redEnemNota" min="0" max="1000" step="40" placeholder="Ex: 760" required />
+              </div>
+              <div class="form-group">
+                <label>Competência 1 (0–200)</label>
+                <input type="number" id="redEnemC1" min="0" max="200" step="40" placeholder="Ex: 160" />
+              </div>
+              <div class="form-group">
+                <label>Competência 2 (0–200)</label>
+                <input type="number" id="redEnemC2" min="0" max="200" step="40" placeholder="Ex: 160" />
+              </div>
+              <div class="form-group">
+                <label>Competência 3 (0–200)</label>
+                <input type="number" id="redEnemC3" min="0" max="200" step="40" placeholder="Ex: 160" />
+              </div>
+              <div class="form-group">
+                <label>Competência 4 (0–200)</label>
+                <input type="number" id="redEnemC4" min="0" max="200" step="40" placeholder="Ex: 160" />
+              </div>
+              <div class="form-group">
+                <label>Competência 5 (0–200)</label>
+                <input type="number" id="redEnemC5" min="0" max="200" step="40" placeholder="Ex: 160" />
+              </div>
+              <div class="form-group form-full">
+                <label>Observações sobre a Redação</label>
+                <textarea id="redEnemObs" rows="3" placeholder="Aponte os erros e pontos de melhoria…"></textarea>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:16px">
+              <button type="submit" class="btn-primary">Salvar Redação</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="listaRedacoesEnem" class="simulados-list"></div>
+
+      <!-- Gráficos de redação ENEM -->
+      <div id="graficosRedacaoEnem" class="mt-24" style="display:none">
+        <div class="card mb-16">
+          <div class="card-header"><h3>Evolução da Nota Geral</h3></div>
+          <div class="card-body chart-container"><canvas id="chartRedEnemNota"></canvas></div>
+        </div>
+        <div class="charts-grid" id="chartsRedEnemComp"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ REDAÇÕES GERAIS ══ -->
+    <section class="page" id="page-redacoes_gerais">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Redações Gerais</h1>
+          <p class="page-subtitle">Registre redações de outros vestibulares e concursos</p>
+        </div>
+        <button class="btn-primary" id="btnNovaRedacaoGeral">+ Nova Redação</button>
+      </div>
+
+      <div class="card form-card hidden" id="formRedacaoGeralCard">
+        <div class="card-header">
+          <h3 id="formRedacaoGeralTitle">Nova Redação</h3>
+          <button class="btn-icon" id="btnFecharFormRedacaoGeral">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formRedacaoGeral">
+            <input type="hidden" id="redGeralId" />
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label>Tema da Redação</label>
+                <input type="text" id="redGeralTema" placeholder="Ex: Desigualdade social no Brasil" required />
+              </div>
+              <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="redGeralData" required />
+              </div>
+              <div class="form-group">
+                <label>Nota Geral</label>
+                <input type="number" id="redGeralNota" min="0" placeholder="Ex: 8.5" step="0.1" required />
+              </div>
+              <div class="form-group form-full">
+                <label>Observações sobre a Redação</label>
+                <textarea id="redGeralObs" rows="3" placeholder="Aponte os erros e pontos de melhoria…"></textarea>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:16px">
+              <button type="submit" class="btn-primary">Salvar Redação</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="listaRedacoesGerais" class="simulados-list"></div>
+    </section>
+
+    <!-- ══════════════════ CADERNO DE REPERTÓRIOS ══ -->
+    <section class="page" id="page-repertorios">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Caderno de Repertórios</h1>
+          <p class="page-subtitle">Organize seus repertórios por eixo temático</p>
+        </div>
+        <button class="btn-primary" id="btnNovoRepertorio">+ Novo Repertório</button>
+      </div>
+
+      <div class="card form-card hidden" id="formRepertorioCard">
+        <div class="card-header">
+          <h3 id="formRepertorioTitle">Novo Repertório</h3>
+          <button class="btn-icon" id="btnFecharFormRepertorio">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formRepertorio">
+            <input type="hidden" id="repertorioId" />
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Eixo Temático</label>
+                <input type="text" id="repertorioEixo" placeholder="Ex: Tecnologia, Meio Ambiente, Direitos Humanos…" required />
+              </div>
+              <div class="form-group form-full">
+                <label>Texto / Repertório</label>
+                <textarea id="repertorioTexto" rows="5" placeholder="Cole ou escreva o repertório aqui…" required></textarea>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:16px">
+              <button type="submit" class="btn-primary">Salvar Repertório</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filtroRepertorioEixo" class="filter-select">
+          <option value="">Todos os eixos temáticos</option>
+        </select>
+      </div>
+
+      <div id="listaRepertorios" class="repertorios-list"></div>
+    </section>
+
+    <!-- ══════════════════ CRONOGRAMA ══ -->
+    <section class="page" id="page-cronograma">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Cronograma Semanal</h1>
+          <p class="page-subtitle">Organize seus estudos por dia e horário. Clique em qualquer célula para editar.</p>
+        </div>
+      </div>
+
+      <!-- Adicionar horário -->
+      <div class="card mb-24">
+        <div class="card-header"><h3>Adicionar Horário</h3></div>
+        <div class="card-body">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <div class="form-group" style="margin:0;flex-direction:row;align-items:center;gap:8px">
+              <label style="white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px">Horário (HH:MM)</label>
+              <input type="time" id="inputNovoHorario" class="crono-time-input" placeholder="08:00" />
+            </div>
+            <button class="btn-primary" id="btnAddHorario">+ Adicionar</button>
+          </div>
+          <p style="margin-top:10px;font-size:12.5px;color:var(--text-muted)">
+            Clique em qualquer célula da tabela para adicionar ou editar o conteúdo e a cor daquele slot.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabela do cronograma -->
+      <div class="card">
+        <div class="card-body" style="padding:0">
+          <div id="cronoTableWrap">
+            <p class="empty-state" style="padding:32px">Adicione um horário para começar.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal editor de slot -->
+      <div class="modal-overlay hidden" id="slotEditorModal">
+        <div class="modal" style="max-width:380px">
+          <div class="modal-header">
+            <h3 id="slotEditorTitle">Editar Slot</h3>
+            <button class="btn-icon" id="btnFecharSlotEditor">✕</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="slotEditorKey" />
+            <div class="form-group" style="margin-bottom:16px">
+              <label>Descrição</label>
+              <input type="text" id="slotEditorTexto" placeholder="Ex: Matemática, Revisão, Descanso…" maxlength="60"
+                style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;width:100%;outline:none" />
+            </div>
+            <div class="form-group" style="margin-bottom:20px">
+              <label>Cor do Slot</label>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="color" id="slotEditorCor" class="cor-picker" style="width:44px;height:36px;cursor:pointer;border-radius:6px;border:1px solid var(--border);padding:2px" />
+                <input type="text" id="slotEditorCorHex" maxlength="7" placeholder="#2563eb"
+                  style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;width:110px;outline:none;font-family:monospace" />
+                <!-- Paleta de cores rápidas -->
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                  <button class="crono-cor-quick" style="background:#2563eb" onclick="quickCor('#2563eb')"></button>
+                  <button class="crono-cor-quick" style="background:#10b981" onclick="quickCor('#10b981')"></button>
+                  <button class="crono-cor-quick" style="background:#f59e0b" onclick="quickCor('#f59e0b')"></button>
+                  <button class="crono-cor-quick" style="background:#ef4444" onclick="quickCor('#ef4444')"></button>
+                  <button class="crono-cor-quick" style="background:#8b5cf6" onclick="quickCor('#8b5cf6')"></button>
+                  <button class="crono-cor-quick" style="background:#06b6d4" onclick="quickCor('#06b6d4')"></button>
+                  <button class="crono-cor-quick" style="background:#f97316" onclick="quickCor('#f97316')"></button>
+                  <button class="crono-cor-quick" style="background:#84cc16" onclick="quickCor('#84cc16')"></button>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn-primary" id="btnSalvarSlot" style="flex:1">Salvar</button>
+              <button class="btn-danger"  id="btnLimparSlot">Limpar Slot</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ REVISÃO ESPAÇADA ══ -->
+    <section class="page" id="page-revisao">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Revisão Espaçada</h1>
+          <p class="page-subtitle">Não deixe o conteúdo escapar da memória</p>
+        </div>
+        <button class="btn-primary" id="btnNovaRevisao">+ Novo Conteúdo</button>
+      </div>
+
+      <div class="card mb-24">
+        <div class="card-header"><h3>Intervalos de Revisão (dias após o estudo)</h3></div>
+        <div class="card-body">
+          <div class="intervalos-list" id="intervalosList"></div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center">
+            <button class="btn-secondary" id="btnAddIntervalo">+ Adicionar Intervalo</button>
+            <button class="btn-primary"   id="btnSalvarIntervalos">Salvar Intervalos</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card form-card hidden" id="formRevisaoCard">
+        <div class="card-header">
+          <h3>Novo Conteúdo para Revisão</h3>
+          <button class="btn-icon" id="btnFecharFormRevisao">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formRevisao" class="form-grid">
+            <div class="form-group">
+              <label>Matéria</label>
+              <select id="revMateria" required>
+                <option value="">Selecione…</option>
+                <option>Matemática</option><option>Português</option>
+                <option>Inglês</option><option>Biologia</option>
+                <option>Física</option><option>Química</option>
+                <option>História</option><option>Geografia</option>
+                <option>Filosofia</option><option>Sociologia</option>
+              </select>
+            </div>
+            <div class="form-group form-full">
+              <label>Conteúdo / Tópico</label>
+              <input type="text" id="revConteudo" placeholder="Ex: Equações do 2º grau" required />
+            </div>
+            <div class="form-group">
+              <label>Data de Estudo</label>
+              <input type="date" id="revData" required />
+            </div>
+            <div class="form-group form-full">
+              <label>Observações (opcional)</label>
+              <textarea id="revObs" rows="2" placeholder="Anotações rápidas…"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Agendar Revisões</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="tabs" id="revisaoTabs">
+        <button class="tab active" data-rtab="pendentes">Pendentes</button>
+        <button class="tab" data-rtab="feitas">Feitas</button>
+        <button class="tab" data-rtab="todos">Todos os Conteúdos</button>
+      </div>
+
+      <div class="filter-bar" id="revisaoFilterBar">
+        <select id="filtroRevisaoMateria" class="filter-select">
+          <option value="">Todas as matérias</option>
+          <option>Matemática</option><option>Português</option>
+          <option>Inglês</option><option>Biologia</option>
+          <option>Física</option><option>Química</option>
+          <option>História</option><option>Geografia</option>
+          <option>Filosofia</option><option>Sociologia</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-body" id="revisaoTabContent">
+          <p class="empty-state">Nenhum conteúdo ainda.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CONTROLE DE ERROS ══ -->
+    <section class="page" id="page-erros">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Controle de Erros</h1>
+          <p class="page-subtitle">Registre e revise seus erros</p>
+        </div>
+        <button class="btn-primary" id="btnNovoErro">+ Novo Erro</button>
+      </div>
+
+      <div class="card form-card hidden" id="formErroCard">
+        <div class="card-header">
+          <h3 id="formErroTitle">Novo Erro</h3>
+          <button class="btn-icon" id="btnFecharFormErro">✕</button>
+        </div>
+        <div class="card-body">
+          <form id="formErro" class="form-grid">
+            <input type="hidden" id="erroId" />
+            <div class="form-group">
+              <label>Matéria</label>
+              <select id="erroMateria" required>
+                <option value="">Selecione…</option>
+                <option>Matemática</option><option>Português</option>
+                <option>Inglês</option><option>Biologia</option>
+                <option>Física</option><option>Química</option>
+                <option>História</option><option>Geografia</option>
+                <option>Filosofia</option><option>Sociologia</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Assunto</label>
+              <input type="text" id="erroAssunto" placeholder="Ex: Funções trigonométricas" required />
+            </div>
+            <div class="form-group form-full">
+              <label>Enunciado da Questão</label>
+              <textarea id="erroEnunciado" rows="3" placeholder="Cole ou descreva o enunciado…"></textarea>
+            </div>
+            <div class="form-group form-full">
+              <label>Imagem do Enunciado (opcional)</label>
+              <input type="file" id="erroImgEnunciado" accept="image/*" class="file-input" />
+              <img id="previewEnunciado" class="img-preview hidden" alt="preview" />
+            </div>
+            <div class="form-group form-full">
+              <label>Resolução / Gabarito</label>
+              <textarea id="erroResolucao" rows="3" placeholder="Explique a resolução correta…"></textarea>
+            </div>
+            <div class="form-group form-full">
+              <label>Imagem da Resolução (opcional)</label>
+              <input type="file" id="erroImgResolucao" accept="image/*" class="file-input" />
+              <img id="previewResolucao" class="img-preview hidden" alt="preview" />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Salvar Erro</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filtroErroMateria" class="filter-select">
+          <option value="">Todas as matérias</option>
+          <option>Matemática</option><option>Português</option>
+          <option>Inglês</option><option>Biologia</option>
+          <option>Física</option><option>Química</option>
+          <option>História</option><option>Geografia</option>
+          <option>Filosofia</option><option>Sociologia</option>
+        </select>
+      </div>
+
+      <div id="listaErros" class="erros-list"></div>
+
+      <div class="modal-overlay hidden" id="modalErro">
+        <div class="modal modal-lg">
+          <div class="modal-header">
+            <h3 id="modalErroTitle">Detalhe do Erro</h3>
+            <button class="btn-icon" id="btnFecharModalErro">✕</button>
+          </div>
+          <div class="modal-body" id="modalErroBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CONFIGURAÇÕES ══ -->
+    <section class="page" id="page-config">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Configurações</h1>
+          <p class="page-subtitle">Backup, preferências e personalização</p>
+        </div>
+      </div>
+
+      <!-- Nome do Site -->
+      <div class="card mb-24">
+        <div class="card-header"><h3>Nome do Site</h3></div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px">Personalize o nome exibido na sidebar e na aba do navegador.</p>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input type="text" id="inputNomeSite" placeholder="Ex: Site do João" maxlength="40"
+              style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;flex:1;min-width:200px;outline:none" />
+            <button class="btn-primary" id="btnSalvarNomeSite">Salvar Nome</button>
+            <button class="btn-secondary" id="btnResetarNomeSite">Restaurar Padrão</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personalização de Cores -->
+      <div class="card mb-24">
+        <div class="card-header"><h3>Personalização de Cores</h3></div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:18px">Insira o código hexadecimal (ex: #2563eb) para cada elemento. Clique em "Aplicar Cores" para ver as mudanças.</p>
+          <div class="cores-grid">
+            <div class="cor-item">
+              <label>Fundo da Página</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corBg" />
+                <input type="text" class="cor-hex" id="corBgHex" placeholder="#f4f5f7" maxlength="7" />
+              </div>
+            </div>
+            <div class="cor-item">
+              <label>Superfície (Cards)</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corSurface" />
+                <input type="text" class="cor-hex" id="corSurfaceHex" placeholder="#ffffff" maxlength="7" />
+              </div>
+            </div>
+            <div class="cor-item">
+              <label>Cor de Destaque (Accent)</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corAccent" />
+                <input type="text" class="cor-hex" id="corAccentHex" placeholder="#2563eb" maxlength="7" />
+              </div>
+            </div>
+            <div class="cor-item">
+              <label>Texto Principal</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corText" />
+                <input type="text" class="cor-hex" id="corTextHex" placeholder="#14161a" maxlength="7" />
+              </div>
+            </div>
+            <div class="cor-item">
+              <label>Borda</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corBorder" />
+                <input type="text" class="cor-hex" id="corBorderHex" placeholder="#e2e4e9" maxlength="7" />
+              </div>
+            </div>
+            <div class="cor-item">
+              <label>Sidebar</label>
+              <div class="cor-input-wrap">
+                <input type="color" class="cor-picker" id="corSidebar" />
+                <input type="text" class="cor-hex" id="corSidebarHex" placeholder="#ffffff" maxlength="7" />
+              </div>
+            </div>
+          </div>
+          <div class="form-actions mt-16" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn-primary" id="btnAplicarCores">Aplicar Cores</button>
+            <button class="btn-secondary" id="btnResetarCores">Restaurar Padrão</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fonte do Site -->
+      <div class="card mb-24">
+        <div class="card-header"><h3>Fonte do Site</h3></div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:18px">Escolha a família tipográfica usada em todo o site.</p>
+          <div class="fontes-grid" id="fontesGrid">
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="DM Sans" />
+              <span class="fonte-preview" style="font-family:'DM Sans',sans-serif">DM Sans — Padrão</span>
+            </label>
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="Inter" />
+              <span class="fonte-preview" style="font-family:'Inter',sans-serif">Inter — Moderna</span>
+            </label>
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="Roboto" />
+              <span class="fonte-preview" style="font-family:'Roboto',sans-serif">Roboto — Clean</span>
+            </label>
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="Lato" />
+              <span class="fonte-preview" style="font-family:'Lato',sans-serif">Lato — Suave</span>
+            </label>
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="Merriweather" />
+              <span class="fonte-preview" style="font-family:'Merriweather',serif">Merriweather — Serifada</span>
+            </label>
+            <label class="fonte-option">
+              <input type="radio" name="fonte" value="Fira Code" />
+              <span class="fonte-preview" style="font-family:'Fira Code',monospace">Fira Code — Monospace</span>
+            </label>
+          </div>
+          <div class="form-actions mt-16" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn-primary" id="btnAplicarFonte">Aplicar Fonte</button>
+            <button class="btn-secondary" id="btnResetarFonte">Restaurar Padrão</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Backup -->
+      <div class="card">
+        <div class="card-header"><h3>Backup de Dados</h3></div>
+        <div class="card-body backup-grid">
+          <div class="backup-item">
+            <div class="backup-icon">↓</div>
+            <div>
+              <strong>Exportar Dados</strong>
+              <p>Baixe um arquivo JSON com todos os seus dados.</p>
+            </div>
+            <button class="btn-primary" id="btnExportar">Exportar</button>
+          </div>
+          <div class="backup-item">
+            <div class="backup-icon">↑</div>
+            <div>
+              <strong>Importar Dados</strong>
+              <p>Restaure seus dados a partir de um backup JSON.</p>
+            </div>
+            <div class="import-area">
+              <input type="file" id="inputImportar" accept=".json" class="file-input" />
+              <button class="btn-secondary" id="btnImportar">Importar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+
+  </div><!-- /app-wrapper -->
+</body>
+</html>
