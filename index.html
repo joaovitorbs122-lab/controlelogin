@@ -26,7 +26,7 @@
     //    Firebase Console → Configurações do projeto → Seus apps
     // ════════════════════════════════════════════════════════
     const firebaseConfig = {
-      apiKey:            "AIzaSyBdKgFVhho8-y9g5Ejl3TbA4SCNkMZnKac",
+     apiKey:            "AIzaSyBdKgFVhho8-y9g5Ejl3TbA4SCNkMZnKac",
       authDomain:        "controle-de-estudos-8fe8e.firebaseapp.com",
       projectId:         "controle-de-estudos-8fe8e",
       storageBucket:     "controle-de-estudos-8fe8e.firebasestorage.app",
@@ -156,10 +156,7 @@
   <div id="app-wrapper" style="display:none">
 
   <!-- botão de logout fixo no topo -->
-  <div class="logout-bar">
-    <span id="user-email-label" class="user-email"></span>
-    <button id="logout-btn" class="logout-btn-top">Sair</button>
-  </div>
+  <div class="logout-bar" style="display:none"></div>
 
   <!-- ═══════════════════════════════════════ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
@@ -207,6 +204,10 @@
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-date" id="sidebarDate"></div>
+      <div class="sidebar-user">
+        <span id="user-email-label" class="user-email"></span>
+        <button id="logout-btn" class="logout-btn-top">Sair</button>
+      </div>
     </div>
   </aside>
 
